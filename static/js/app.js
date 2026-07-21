@@ -9,6 +9,7 @@ function syncThemeIcon() {
   themeToggle?.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
 }
 
+
 if (themeToggle) {
   syncThemeIcon();
   themeToggle.addEventListener('click', () => {
