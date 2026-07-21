@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Entrar | Checklist{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-art">
+    <p class="eyebrow">ORGANIZE DO SEU JEITO</p>
+    <h1>Ideias, estudos e rotina em um só lugar.</h1>
+    <p>Crie listas independentes, escolha uma cor para cada tema e acompanhe o que já foi feito.</p>
+    <div class="art-grid"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+  <form class="auth-form" method="post">
+    <h2>Entrar</h2>
+    <p>Use sua conta para acessar seus checklists.</p>
+    <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+    <label>Senha<input type="password" name="senha" required autocomplete="current-password"></label>
+    <button class="button full" type="submit">Entrar</button>
+    <p class="form-footer">Ainda não tem conta? <a href="{{ url_for('cadastro') }}">Criar cadastro</a></p>
+  </form>
+</section>
+{% endblock %}

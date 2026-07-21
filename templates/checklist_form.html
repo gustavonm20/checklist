@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if checklist else 'Novo' }} checklist{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="section-heading">
+    <p class="eyebrow">{{ 'AJUSTAR LISTA' if checklist else 'NOVA LISTA' }}</p>
+    <h1>{{ 'Editar checklist' if checklist else 'Criar checklist' }}</h1>
+  </div>
+  <form class="editor-form" method="post">
+    <label>Título<input type="text" name="titulo" maxlength="160" required value="{{ checklist.titulo if checklist else '' }}" placeholder="Ex.: Projeto da faculdade"></label>
+    <label>Descrição<textarea name="descricao" maxlength="500" rows="4" placeholder="Explique rapidamente o objetivo desta lista">{{ checklist.descricao if checklist else '' }}</textarea></label>
+    <label>Data planejada<input type="date" name="data_planejada" value="{{ checklist.data_planejada.isoformat() if checklist and checklist.data_planejada else '' }}"></label>
+    <fieldset>
+      <legend>Cor do tema</legend>
+      <div class="color-options">
+        {% for cor in ['azul','rosa','amarelo','verde','roxo','laranja'] %}
+        <label class="color-choice {{ cor }}"><input type="radio" name="cor" value="{{ cor }}" {{ 'checked' if (checklist and checklist.cor == cor) or (not checklist and cor == 'azul') }}><span></span>{{ cor|capitalize }}</label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="form-actions"><a class="button ghost" href="{{ url_for('painel') }}">Cancelar</a><button class="button" type="submit">Salvar checklist</button></div>
+  </form>
+</section>
+{% endblock %}

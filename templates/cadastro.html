@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Criar conta | Checklist{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-art warm">
+    <p class="eyebrow">COMECE PELO PRIMEIRO PASSO</p>
+    <h1>Uma conta. Quantos checklists você precisar.</h1>
+    <p>Seus dados ficam separados por usuário e salvos no banco de dados da aplicação.</p>
+    <div class="art-lines"></div>
+  </div>
+  <form class="auth-form" method="post">
+    <h2>Criar conta</h2>
+    <label>Nome<input type="text" name="nome" minlength="2" required></label>
+    <label>E-mail<input type="email" name="email" required></label>
+    <label>Senha<input type="password" name="senha" minlength="6" required></label>
+    <button class="button full" type="submit">Cadastrar</button>
+    <p class="form-footer">Já possui conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+  </form>
+</section>
+{% endblock %}

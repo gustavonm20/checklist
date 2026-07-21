@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Meus checklists{% endblock %}
+{% block content %}
+<section class="dashboard-head">
+  <div>
+    <p class="eyebrow">OLÁ, {{ usuario_atual.nome.upper() }}</p>
+    <h1>O que precisa sair do papel?</h1>
+    <p>Organize cada assunto em uma lista própria e volte quando precisar.</p>
+  </div>
+  <a class="button" href="{{ url_for('novo_checklist') }}">+ Criar checklist</a>
+</section>
+
+<section class="stats-strip">
+  <div><strong>{{ checklists|length }}</strong><span>listas nesta visão</span></div>
+  <div><strong>{{ total_tarefas }}</strong><span>tarefas criadas</span></div>
+  <div><strong>{{ total_concluidas }}</strong><span>tarefas concluídas</span></div>
+  <div><strong>{{ proximos|length }}</strong><span>datas próximas</span></div>
+</section>
+
+<div class="filter-row">
+  <a class="{{ 'active' if filtro == 'ativos' }}" href="{{ url_for('painel', filtro='ativos') }}">Ativos</a>
+  <a class="{{ 'active' if filtro == 'concluidos' }}" href="{{ url_for('painel', filtro='concluidos') }}">Concluídos</a>
+  <a class="{{ 'active' if filtro == 'arquivados' }}" href="{{ url_for('painel', filtro='arquivados') }}">Arquivados</a>
+</div>
+
+{% if checklists %}
+<section class="checklist-list">
+  {% for item in checklists %}
+  <article class="checklist-row color-{{ item.cor }}">
+    <div class="color-marker"></div>
+    <div class="row-main">
+      <div class="row-title-line">
+        <a href="{{ url_for('ver_checklist', checklist_id=item.id) }}">{{ item.titulo }}</a>
+        {% if item.data_planejada %}<time>{{ item.data_planejada.strftime('%d/%m/%Y') }}</time>{% endif %}
+      </div>
+      <p>{{ item.descricao or 'Sem descrição. Abra para adicionar tarefas.' }}</p>
+      <div class="progress-line"><span style="width: {{ item.progresso }}%"></span></div>
+      <small>{{ item.concluidas }} de {{ item.total }} concluídas · {{ item.progresso }}%</small>
+    </div>
+    <a class="arrow-link" href="{{ url_for('ver_checklist', checklist_id=item.id) }}">Abrir →</a>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<section class="empty-state">
+  <div class="empty-illustration">✓</div>
+  <h2>Nenhum checklist por aqui.</h2>
+  <p>Crie uma lista para estudos, compras, projetos ou qualquer outro tema.</p>
+  <a class="button" href="{{ url_for('novo_checklist') }}">Criar primeiro checklist</a>
+</section>
+{% endif %}
+{% endblock %}

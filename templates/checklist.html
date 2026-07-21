@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}{{ checklist.titulo }}{% endblock %}
+{% block content %}
+<section class="detail-head color-{{ checklist.cor }}">
+  <div class="detail-accent"></div>
+  <div>
+    <a class="back-link" href="{{ url_for('painel') }}">← Voltar aos checklists</a>
+    <p class="eyebrow">{{ checklist.progresso }}% CONCLUÍDO</p>
+    <h1>{{ checklist.titulo }}</h1>
+    <p>{{ checklist.descricao or 'Checklist sem descrição.' }}</p>
+    {% if checklist.data_planejada %}<div class="date-badge">Planejado para {{ checklist.data_planejada.strftime('%d/%m/%Y') }}</div>{% endif %}
+  </div>
+  <div class="detail-actions">
+    <a href="{{ url_for('editar_checklist', checklist_id=checklist.id) }}">Editar lista</a>
+    <form method="post" action="{{ url_for('arquivar_checklist', checklist_id=checklist.id) }}"><button type="submit">{{ 'Desarquivar' if checklist.arquivado else 'Arquivar' }}</button></form>
+  </div>
+</section>
+
+<section class="task-composer">
+  <h2>Adicionar nova tarefa</h2>
+  <form method="post" action="{{ url_for('nova_tarefa', checklist_id=checklist.id) }}">
+    <input type="text" name="titulo" required placeholder="O que precisa ser feito?">
+    <input type="text" name="observacao" placeholder="Detalhe opcional">
+    <button class="button" type="submit">Adicionar</button>
+  </form>
+</section>
+
+<section class="tasks-section">
+  <div class="tasks-heading"><h2>Tarefas</h2><span>{{ checklist.concluidas }}/{{ checklist.total }}</span></div>
+  <div class="progress-line large"><span id="progress-fill" style="width: {{ checklist.progresso }}%"></span></div>
+  {% if checklist.tarefas %}
+  <div class="task-list">
+    {% for tarefa in checklist.tarefas %}
+    <article class="task-item {{ 'done' if tarefa.concluida }}" data-task-id="{{ tarefa.id }}">
+      <button class="task-toggle" type="button" aria-label="Alternar conclusão">{{ '✓' if tarefa.concluida else '' }}</button>
+      <div class="task-copy"><strong>{{ tarefa.titulo }}</strong>{% if tarefa.observacao %}<span>{{ tarefa.observacao }}</span>{% endif %}</div>
+      <details class="task-menu">
+        <summary>•••</summary>
+        <form method="post" action="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}">
+          <input name="titulo" value="{{ tarefa.titulo }}" required>
+          <input name="observacao" value="{{ tarefa.observacao }}" placeholder="Observação">
+          <button type="submit">Salvar alterações</button>
+        </form>
+        <form method="post" action="{{ url_for('excluir_tarefa', tarefa_id=tarefa.id) }}" onsubmit="return confirm('Excluir esta tarefa?')"><button class="danger" type="submit">Excluir tarefa</button></form>
+      </details>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}<p class="empty-inline">A lista ainda está vazia. Adicione a primeira tarefa acima.</p>{% endif %}
+</section>
+
+<section class="danger-zone">
+  <form method="post" action="{{ url_for('excluir_checklist', checklist_id=checklist.id) }}" onsubmit="return confirm('Excluir este checklist e todas as tarefas?')"><button type="submit">Excluir checklist</button></form>
+</section>
+{% endblock %}

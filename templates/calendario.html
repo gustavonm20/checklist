@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Calendário{% endblock %}
+{% block content %}
+<section class="calendar-head"><div><p class="eyebrow">PLANEJAMENTO</p><h1>Calendário de checklists</h1><p>Veja quais listas foram atribuídas a cada data.</p></div><a class="button" href="{{ url_for('novo_checklist') }}">Nova lista com data</a></section>
+{% if agrupados %}
+  {% for mes, itens in agrupados.items() %}
+  <section class="month-block">
+    <h2>{{ mes }}</h2>
+    <div class="calendar-list">
+      {% for item in itens %}
+      <a class="calendar-entry color-{{ item.cor }}" href="{{ url_for('ver_checklist', checklist_id=item.id) }}">
+        <time><strong>{{ item.data_planejada.strftime('%d') }}</strong><span>{{ item.data_planejada.strftime('%m/%Y') }}</span></time>
+        <div><strong>{{ item.titulo }}</strong><span>{{ item.concluidas }}/{{ item.total }} tarefas concluídas</span></div>
+        <em>{{ item.progresso }}%</em>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+{% else %}
+<section class="empty-state"><div class="empty-illustration">31</div><h2>Nenhuma data marcada.</h2><p>Ao criar ou editar um checklist, escolha uma data para exibi-lo aqui.</p></section>
+{% endif %}
+{% endblock %}
