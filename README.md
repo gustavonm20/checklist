@@ -43,5 +43,6 @@ Instale as dependências e inicie:
 pip install -r requirements.txt
 python app.py
 ```
+#Projeto desenvolvido para organização de tarefas e checklists.
 
 Abra `http://127.0.0.1:5000`.
